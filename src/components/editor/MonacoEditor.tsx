@@ -1,9 +1,16 @@
 import Editor from "@monaco-editor/react";
 import { useEditorStore } from "@/store/editorStore";
+import { initCollaboration } from "@/lib/collaboration/yjsProvider";
+import { useRef } from "react";
 
 export function MonacoEditor() {
-  const pythonCode = useEditorStore((state) => state.pythonCode);
   const setPythonCode = useEditorStore((state) => state.setPythonCode);
+  const editorRef = useRef<any>(null);
+
+  const handleEditorDidMount = (editor: any) => {
+    editorRef.current = editor;
+    initCollaboration(editor);
+  };
 
   return (
     <div className="w-full h-full bg-zinc-950 p-2">
@@ -11,7 +18,7 @@ export function MonacoEditor() {
         height="100%"
         defaultLanguage="python"
         theme="vs-dark"
-        value={pythonCode}
+        onMount={handleEditorDidMount}
         onChange={(value: string | undefined) => setPythonCode(value || "")}
         options={{
           minimap: { enabled: false },
