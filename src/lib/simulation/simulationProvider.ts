@@ -1,8 +1,10 @@
 import type { ConnectionProvider } from "@/lib/hardware/connectionManager";
+import { useEditorStore } from "@/store/editorStore";
 
 export class SimulationProvider implements ConnectionProvider {
   private worker: Worker | null = null;
   private onStdoutCb: ((data: string) => void) | null = null;
+  private storeUnsub: (() => void) | null = null;
 
   async connect(onStdout: (data: string) => void): Promise<boolean> {
     this.onStdoutCb = onStdout;
@@ -20,6 +22,14 @@ export class SimulationProvider implements ConnectionProvider {
       };
 
       this.worker.postMessage({ type: "init" });
+
+      // Subscribe to gamepad state and forward to worker
+      this.storeUnsub = useEditorStore.subscribe((state) => {
+        if (state.gamepadState && this.worker) {
+          this.worker.postMessage({ type: "gamepad_state", state: state.gamepadState });
+        }
+      });
+
       return true;
     } catch (e: any) {
       console.error(e);
@@ -33,6 +43,10 @@ export class SimulationProvider implements ConnectionProvider {
       this.worker.terminate();
       this.worker = null;
       this.onStdoutCb?.("Simulation Terminated.\n");
+    }
+    if (this.storeUnsub) {
+      this.storeUnsub();
+      this.storeUnsub = null;
     }
   }
 

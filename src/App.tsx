@@ -1,6 +1,9 @@
 import { HashRouter as Router, Routes, Route, Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Workspace } from "@/components/editor/Workspace"
+import { TeacherDashboard } from "@/components/dashboard/TeacherDashboard"
+import { useEffect } from "react"
+import { startGamepadPolling, stopGamepadPolling } from "@/lib/hardware/gamepad"
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,7 +12,12 @@ function Layout({ children }: { children: React.ReactNode }) {
         <Link to="/" className="font-bold text-lg tracking-tight hover:text-primary transition-colors">
           Harmonia IDE
         </Link>
-        <Button variant="outline" size="sm">Login</Button>
+        <div className="flex gap-2">
+          <Link to="/dashboard">
+            <Button variant="ghost" size="sm">Dashboard</Button>
+          </Link>
+          <Button variant="outline" size="sm">Login</Button>
+        </div>
       </header>
       <main className="flex-1 overflow-hidden">
         {children}
@@ -31,12 +39,18 @@ function HomePage() {
 }
 
 export default function App() {
+  useEffect(() => {
+    startGamepadPolling();
+    return () => stopGamepadPolling();
+  }, []);
+
   return (
     <Router>
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/editor" element={<Workspace />} />
+          <Route path="/dashboard" element={<TeacherDashboard />} />
         </Routes>
       </Layout>
     </Router>
