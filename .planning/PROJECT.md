@@ -4,9 +4,12 @@
 
 A universal, web-based robotics IDE designed for educational environments. It brings together disparate hardware platforms (Lego Pybricks, XRP, Rev IQ) under a single, seamless coding experience featuring two-way Block-to-Text synchronization, interactive simulator environments, and integrated classroom tools.
 
-## Core Value
+## Current State
+**Shipped Version:** v1.0
+**Core value:** To provide a frictionless, 100% free, "write once, run anywhere" educational coding platform that eliminates the barriers between different robotic hardware ecosystems.
 
-To provide a frictionless, 100% free, "write once, run anywhere" educational coding platform that eliminates the barriers between different robotic hardware ecosystems.
+## Next Milestone Goals
+*To be defined via /gsd-new-milestone*
 
 ## Requirements
 
