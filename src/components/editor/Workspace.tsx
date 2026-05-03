@@ -9,7 +9,7 @@ import { TelemetryPanel } from "./TelemetryPanel";
 
 export function Workspace() {
   return (
-    <div className="w-full h-full flex flex-col bg-background">
+    <div className="w-full flex-1 flex flex-col bg-background">
       <HardwareToolbar />
       <PanelGroup orientation="horizontal" className="flex-1 w-full">
         <Panel defaultSize={40} minSize={20}>

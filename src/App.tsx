@@ -7,7 +7,7 @@ import { startGamepadPolling, stopGamepadPolling } from "@/lib/hardware/gamepad"
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground dark">
+    <div className="h-screen w-screen flex flex-col bg-background text-foreground dark overflow-hidden">
       <header className="border-b h-14 flex items-center px-4 justify-between bg-card shrink-0">
         <Link to="/" className="font-bold text-lg tracking-tight hover:text-primary transition-colors">
           Harmonia IDE

@@ -4,6 +4,8 @@ import { pythonGenerator } from "blockly/python";
 import { useEditorStore } from "@/store/editorStore";
 import { registerRobotBlocks } from "@/lib/blocks/robotBlocks";
 import { registerRobotGenerators } from "@/lib/blocks/robotGenerators";
+import { registerLegoBlocks } from "@/lib/blocks/legoBlocks";
+import { registerLegoGenerators } from "@/lib/blocks/legoGenerators";
 
 export function BlocklyEditor() {
   const blocklyDiv = useRef<HTMLDivElement>(null);
@@ -15,6 +17,8 @@ export function BlocklyEditor() {
 
     registerRobotBlocks();
     registerRobotGenerators();
+    registerLegoBlocks();
+    registerLegoGenerators();
 
     const workspace = Blockly.inject(blocklyDiv.current, {
       toolbox: {
@@ -27,6 +31,16 @@ export function BlocklyEditor() {
             contents: [
               { kind: "block", type: "harmonia_drive" },
               { kind: "block", type: "harmonia_sleep" },
+            ],
+          },
+          {
+            kind: "category",
+            name: "🧱 Advanced Lego",
+            colour: "290",
+            contents: [
+              { kind: "block", type: "lego_motor_run_target" },
+              { kind: "block", type: "lego_motor_run_stalled" },
+              { kind: "block", type: "lego_color_sensor" },
             ],
           },
           {
@@ -82,6 +96,13 @@ export function BlocklyEditor() {
 
     setBlocklyWorkspace(workspace);
 
+    const resizeObserver = new ResizeObserver(() => {
+      Blockly.svgResize(workspace);
+    });
+    if (blocklyDiv.current) {
+      resizeObserver.observe(blocklyDiv.current);
+    }
+
     const onWorkspaceChange = (event: any) => {
       // Don't generate code for purely UI events to prevent lag
       if (event.isUiEvent) return;
@@ -93,6 +114,7 @@ export function BlocklyEditor() {
     workspace.addChangeListener(onWorkspaceChange);
 
     return () => {
+      resizeObserver.disconnect();
       workspace.removeChangeListener(onWorkspaceChange);
       workspace.dispose();
     };
