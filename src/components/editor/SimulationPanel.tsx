@@ -57,15 +57,35 @@ export function SimulationPanel() {
     const onSimulationCmd = (e: any) => {
       const data = e.detail;
       if (data.cmd === "drive" && robotRef.current) {
-        // Apply force based on left/right speed.
-        // For simplicity, we just apply a forward force if both are positive.
-        const speed = (data.left + data.right) / 2;
-        const forceMagnitude = speed * 0.0005; 
+        // Differential drive kinematics
+        const left = data.left;
+        const right = data.right;
+        
+        const speed = (left + right) / 2;
+        const rotation = (right - left) / 2; // Right > Left turns left (negative angle in CSS/Matter depending on setup. Let's say right>left -> counterclockwise rotation)
+        
+        // Tuning constants
+        const forceMagnitude = speed * 0.0001; 
+        const torqueMagnitude = rotation * 0.00005;
+
+        // Calculate force vector based on current angle (up is -y)
+        const angle = robotRef.current.angle;
+        // matter.js angle 0 is pointing right. Let's assume pointing up is -PI/2.
+        // Wait, if we rendered a rectangle, we usually drive it along its local Y axis.
+        // Let's apply force along its local "forward" vector (which is UP when angle=0 if we treat it that way, or we can use standard trig).
+        // Let's assume it points UP by default. UP is (0, -1) when angle = 0.
+        // Rotated by `angle`:
+        // x_force = forceMagnitude * sin(angle)
+        // y_force = -forceMagnitude * cos(angle)
+        const fx = forceMagnitude * Math.sin(angle);
+        const fy = -forceMagnitude * Math.cos(angle);
         
         Matter.Body.applyForce(robotRef.current, robotRef.current.position, {
-          x: 0,
-          y: -forceMagnitude // Move "up"
+          x: fx,
+          y: fy
         });
+        
+        Matter.Body.setAngularVelocity(robotRef.current, robotRef.current.angularVelocity + torqueMagnitude);
       }
     };
 

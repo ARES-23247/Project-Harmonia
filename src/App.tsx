@@ -19,7 +19,7 @@ function Layout({ children }: { children: React.ReactNode }) {
           <Button variant="outline" size="sm">Login</Button>
         </div>
       </header>
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 flex flex-col overflow-hidden">
         {children}
       </main>
     </div>
