@@ -4,12 +4,16 @@
 
 A universal, web-based robotics IDE designed for educational environments. It brings together disparate hardware platforms (Lego Pybricks, XRP, Rev IQ) under a single, seamless coding experience featuring two-way Block-to-Text synchronization, interactive simulator environments, and integrated classroom tools.
 
-## Current State
-**Shipped Version:** v1.0
-**Core value:** To provide a frictionless, 100% free, "write once, run anywhere" educational coding platform that eliminates the barriers between different robotic hardware ecosystems.
+## Current Milestone: v1.1 UX Foundation & Block Fixes
 
-## Next Milestone Goals
-*To be defined via /gsd-new-milestone*
+**Goal:** Fix core block coding functionality and establish a polished, accessible, performant user experience.
+
+**Target features:**
+- Block Fixes: Fix drag-drop, static palette, core Blockly integration
+- UI Polish: Visual design refinement, animations, component consistency, theme support
+- Performance: Load times, editor responsiveness, large project handling
+- Accessibility: Screen reader support, keyboard navigation, high contrast modes
+- Onboarding: Interactive tutorials, improved first-run experience
 
 ## Requirements
 
