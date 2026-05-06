@@ -107,28 +107,27 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BLOCK-01 | 1 | Pending |
-| BLOCK-02 | 1 | Pending |
-| BLOCK-03 | 1 | Pending |
-| BLOCK-04 | 1 | Pending |
-| BLOCK-05 | 1 | Pending |
-| A11Y-01 | 2 | Pending |
-| A11Y-02 | 2 | Pending |
-| A11Y-03 | 2 | Pending |
-| A11Y-04 | 2 | Pending |
-| A11Y-05 | 2 | Pending |
-| POLISH-01 | 3 | Pending |
-| POLISH-02 | 3 | Pending |
-| POLISH-03 | 3 | Pending |
-| POLISH-04 | 3 | Pending |
-| PERF-01 | 5 | Pending |
-| PERF-02 | 5 | Pending |
-| PERF-03 | 5 | Pending |
-| ONBOARD-01 | 4 | Pending |
-| ONBOARD-02 | 4 | Pending |
-| ONBOARD-03 | 4 | Pending |
+| BLOCK-01 | 9 | Pending |
+| BLOCK-02 | 9 | Pending |
+| BLOCK-03 | 9 | Pending |
+| BLOCK-04 | 9 | Pending |
+| BLOCK-05 | 9 | Pending |
+| A11Y-01 | 10 | Pending |
+| A11Y-02 | 10 | Pending |
+| A11Y-03 | 10 | Pending |
+| A11Y-04 | 10 | Pending |
+| A11Y-05 | 10 | Pending |
+| POLISH-01 | 11 | Pending |
+| POLISH-02 | 11 | Pending |
+| POLISH-03 | 11 | Pending |
+| POLISH-04 | 11 | Pending |
+| ONBOARD-01 | 12 | Pending |
+| ONBOARD-02 | 12 | Pending |
+| ONBOARD-03 | 12 | Pending |
+| PERF-01 | 13 | Pending |
+| PERF-02 | 13 | Pending |
+| PERF-03 | 13 | Pending |
 
 ---
-
 *Last updated: 2026-05-06*
-*Total requirements: 18 across 5 categories*
+*Total requirements: 18 across 5 phases*
