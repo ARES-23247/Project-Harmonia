@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useEditorStore } from "@/store/editorStore";
 import { askCopilot, generateDebugPrompt, type ChatMessage } from "@/lib/ai/copilot";
 
-export function CopilotPanel() {
+export default function CopilotPanel() {
   const { aiApiKey, setAiApiKey, pythonCode, consoleOutput } = useEditorStore();
   const [isSettingKey, setIsSettingKey] = useState(!aiApiKey);
   const [keyInput, setKeyInput] = useState(aiApiKey || "");

@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import * as Blockly from "blockly";
 
+import { pythonGenerator } from "blockly/python";
+
 interface BlockState {
   workspace: Blockly.WorkspaceSvg | null;
   lastSelectedBlockId: string | null;
@@ -26,10 +28,6 @@ export const useBlockStore = create<BlockState>((set, get) => ({
   generateCode: () => {
     const { workspace } = get();
     if (!workspace) return "";
-    
-    // @ts-ignore - pythonGenerator is usually registered globally or imported
-    const pythonGenerator = (Blockly as any).pythonGenerator;
-    if (!pythonGenerator) return "";
     
     return pythonGenerator.workspaceToCode(workspace);
   },

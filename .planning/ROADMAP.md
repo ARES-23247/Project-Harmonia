@@ -63,10 +63,10 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 17. Dynamic Editor Views | 0/4 | Not started | - |
-| 18. Collapsible Drawer | 0/4 | Not started | - |
-| 19. Pop-out Modals | 0/4 | Not started | - |
-| 20. Bottom Console | 0/4 | Not started | - |
+| 17. Dynamic Editor Views | 4/4 | Complete | 2026-05-07 |
+| 18. Collapsible Drawer | 4/4 | Complete | 2026-05-07 |
+| 19. Pop-out Modals | 4/4 | Complete | 2026-05-07 |
+| 20. Bottom Console | 4/4 | Complete | 2026-05-07 |
 
 ## Milestone v1.1 Archive
 

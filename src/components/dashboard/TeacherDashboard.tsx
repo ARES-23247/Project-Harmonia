@@ -1,47 +1,32 @@
-import { useState } from "react";
-import { useEditorStore } from "@/store/editorStore";
-import { Octokit } from "octokit";
+import { useState, useEffect } from "react";
+import { Plus, Users } from "lucide-react";
 
-interface StudentAssignment {
+interface Classroom {
   id: string;
-  url: string;
-  owner: string;
-  updatedAt: string;
+  name: string;
+  joinCode: string;
+  createdAt: string;
 }
 
 export function TeacherDashboard() {
-  const { githubToken } = useEditorStore();
-  const [tag, setTag] = useState("harmonia-assignment");
-  const [assignments, setAssignments] = useState<StudentAssignment[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [newClassName, setNewClassName] = useState("");
+  const [creating, setCreating] = useState(false);
 
-  const fetchAssignments = async () => {
-    if (!githubToken) {
-      setError("Please login with GitHub first.");
-      return;
-    }
-    
+  useEffect(() => {
+    fetchClassrooms();
+  }, []);
+
+  const fetchClassrooms = async () => {
     setLoading(true);
-    setError(null);
     try {
-      const octokit = new Octokit({ auth: githubToken });
-      // Search for gists with the specific tag in their description
-      // GitHub doesn't have a direct gist search endpoint by description in Octokit easily without listing all or using search,
-      // But we can fetch the user's gists. In a real classroom, the teacher would use a GitHub App.
-      // For this MVP, we fetch the authenticated user's gists and filter them.
-      const response = await octokit.rest.gists.list();
-      
-      const filtered = response.data
-        .filter(g => g.description?.includes(`#${tag}`))
-        .map(g => ({
-          id: g.id,
-          url: g.html_url,
-          owner: g.owner?.login || "Unknown",
-          updatedAt: new Date(g.updated_at).toLocaleString()
-        }));
-
-      setAssignments(filtered);
+      const res = await fetch("/api/classrooms/teacher");
+      const data = await res.json();
+      if (data.classrooms) {
+        setClassrooms(data.classrooms);
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -49,67 +34,97 @@ export function TeacherDashboard() {
     }
   };
 
-  return (
-    <div className="w-full h-full p-8 bg-background flex flex-col items-center">
-      <div className="max-w-4xl w-full">
-        <h1 className="text-3xl font-bold mb-2 text-zinc-100">Teacher Dashboard</h1>
-        <p className="text-zinc-400 mb-8">View student assignments submitted via GitHub Gists.</p>
+  const handleCreateClassroom = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newClassName.trim()) return;
 
-        <div className="flex gap-4 mb-8">
-          <input 
-            type="text" 
-            value={tag}
-            onChange={e => setTag(e.target.value)}
-            className="flex-1 bg-zinc-900 border border-zinc-700 rounded p-2 text-zinc-100"
-            placeholder="Assignment Tag (e.g. harmonia-hw1)"
-          />
-          <button 
-            onClick={fetchAssignments}
-            disabled={loading}
-            className="bg-blue-600 hover:bg-blue-500 text-white rounded px-4 py-2 disabled:opacity-50"
-          >
-            {loading ? "Searching..." : "Search"}
-          </button>
+    setCreating(true);
+    try {
+      const res = await fetch("/api/classrooms/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newClassName }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setClassrooms([...classrooms, data.classroom]);
+        setNewClassName("");
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  return (
+    <div className="w-full h-full p-8 bg-background flex flex-col items-center overflow-y-auto">
+      <div className="max-w-5xl w-full">
+        <div className="flex justify-between items-end mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-zinc-100 font-outfit">Teacher Dashboard</h1>
+            <p className="text-zinc-400 mt-2">Manage your classrooms and track student progress.</p>
+          </div>
+          
+          <form onSubmit={handleCreateClassroom} className="flex gap-2">
+            <input 
+              type="text" 
+              value={newClassName}
+              onChange={e => setNewClassName(e.target.value)}
+              className="bg-zinc-900 border border-zinc-700 rounded px-3 py-2 text-zinc-100 focus:border-blue-500 focus:outline-none"
+              placeholder="New Class Name"
+            />
+            <button 
+              type="submit"
+              disabled={creating || !newClassName.trim()}
+              className="bg-blue-600 hover:bg-blue-500 text-white rounded px-4 py-2 flex items-center gap-2 disabled:opacity-50 transition-colors"
+            >
+              <Plus size={18} />
+              {creating ? "Creating..." : "Create"}
+            </button>
+          </form>
         </div>
 
         {error && (
-          <div className="bg-red-900/50 border border-red-500 text-red-200 p-4 rounded mb-8">
+          <div className="bg-red-900/30 border border-red-500/50 text-red-300 p-4 rounded-lg mb-8 glass">
             {error}
           </div>
         )}
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded shadow overflow-hidden">
-          <table className="w-full text-left text-zinc-300">
-            <thead className="bg-zinc-950 border-b border-zinc-800">
-              <tr>
-                <th className="p-4 font-semibold">Student (Owner)</th>
-                <th className="p-4 font-semibold">Last Updated</th>
-                <th className="p-4 font-semibold">Gist Link</th>
-              </tr>
-            </thead>
-            <tbody>
-              {assignments.length === 0 ? (
-                <tr>
-                  <td colSpan={3} className="p-8 text-center text-zinc-500">
-                    No assignments found for #{tag}
-                  </td>
-                </tr>
-              ) : (
-                assignments.map(a => (
-                  <tr key={a.id} className="border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors">
-                    <td className="p-4">{a.owner}</td>
-                    <td className="p-4 text-zinc-400">{a.updatedAt}</td>
-                    <td className="p-4">
-                      <a href={a.url} target="_blank" rel="noreferrer" className="text-blue-400 hover:text-blue-300 underline">
-                        View Code
-                      </a>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        {loading ? (
+          <div className="text-zinc-500 animate-pulse">Loading classrooms...</div>
+        ) : classrooms.length === 0 ? (
+          <div className="text-center py-20 bg-zinc-900/50 border border-zinc-800 rounded-xl glass">
+            <Users className="mx-auto h-12 w-12 text-zinc-600 mb-4" />
+            <h3 className="text-xl font-medium text-zinc-300 mb-2">No classrooms yet</h3>
+            <p className="text-zinc-500">Create your first classroom to get started.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {classrooms.map(c => (
+              <div key={c.id} className="bg-zinc-900/80 border border-zinc-700/50 rounded-xl p-6 glass hover:border-blue-500/50 transition-colors group">
+                <h3 className="text-xl font-bold text-white mb-2 font-outfit">{c.name}</h3>
+                
+                <div className="bg-zinc-950 rounded p-3 mb-4 flex items-center justify-between border border-zinc-800">
+                  <span className="text-zinc-500 text-sm">Join Code:</span>
+                  <span className="text-2xl font-mono tracking-widest text-blue-400 font-bold">{c.joinCode}</span>
+                </div>
+                
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-zinc-400 flex items-center gap-1">
+                    <Users size={14} />
+                    Active Session
+                  </span>
+                  <a href={`#/editor/${c.joinCode}`} className="text-blue-400 hover:text-blue-300 transition-colors opacity-0 group-hover:opacity-100">
+                    Observe →
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

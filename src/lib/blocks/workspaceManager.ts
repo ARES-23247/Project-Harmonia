@@ -3,8 +3,20 @@ import { registerRobotBlocks } from "./robotBlocks";
 import { registerLegoBlocks } from "./legoBlocks";
 import { registerRobotGenerators } from "./robotGenerators";
 import { registerLegoGenerators } from "./legoGenerators";
+import { KeyboardNavigation } from "@blockly/keyboard-navigation";
 
-export const WORKSPACE_CONFIG: Blockly.BlocklyOptions = {
+// Register keyboard navigation styles and deferring toolbox once at module level
+if (typeof window !== "undefined" && !(window as any).__keyboard_nav_registered) {
+  try {
+    KeyboardNavigation.registerKeyboardNavigationStyles();
+    KeyboardNavigation.registerNavigationDeferringToolbox();
+    (window as any).__keyboard_nav_registered = true;
+  } catch (err) {
+    console.error("Failed to register KeyboardNavigation globals:", err);
+  }
+}
+
+export const WORKSPACE_CONFIG: any = {
   toolbox: {
     kind: "categoryToolbox",
     contents: [
@@ -113,8 +125,45 @@ export function initializeWorkspace(container: HTMLElement): Blockly.WorkspaceSv
 
   const workspace = Blockly.inject(container, WORKSPACE_CONFIG);
   
+  try {
+    // Enable keyboard navigation for the workspace
+    new KeyboardNavigation(workspace);
+  } catch (err) {
+    console.error("Failed to initialize KeyboardNavigation:", err);
+  }
+  
+  // Register ARIA live announcer for screen readers
+  workspace.addChangeListener((event) => {
+    if (event.type === Blockly.Events.BLOCK_CREATE) {
+      announce("New block created.");
+    } else if (event.type === Blockly.Events.BLOCK_DELETE) {
+      announce("Block deleted.");
+    } else if (event.type === Blockly.Events.BLOCK_MOVE) {
+      const moveEvent = event as any; // Cast for simplicity in this version
+      if (moveEvent.newParentId) {
+        announce("Blocks connected.");
+      }
+    }
+  });
+
   // Force a resize initially
   Blockly.svgResize(workspace);
 
   return workspace;
+}
+
+function announce(message: string) {
+  let announcer = document.getElementById("a11y-announcer");
+  if (!announcer) {
+    announcer = document.createElement("div");
+    announcer.id = "a11y-announcer";
+    announcer.setAttribute("aria-live", "polite");
+    announcer.setAttribute("aria-atomic", "true");
+    announcer.className = "sr-only";
+    document.body.appendChild(announcer);
+  }
+  announcer.textContent = "";
+  setTimeout(() => {
+    if (announcer) announcer.textContent = message;
+  }, 100);
 }

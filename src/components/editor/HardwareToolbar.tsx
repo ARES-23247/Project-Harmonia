@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Bluetooth, Usb, PlaySquare, Play } from "lucide-react";
+import { Bluetooth, Usb, PlaySquare, Play, LayoutGrid, Type, Columns, PanelRightOpen, Terminal } from "lucide-react";
 import { useEditorStore } from "@/store/editorStore";
 import { BluetoothProvider } from "@/lib/hardware/bluetooth";
 import { SerialProvider } from "@/lib/hardware/serial";
@@ -11,13 +11,20 @@ export function HardwareToolbar() {
   const setConnectionState = useEditorStore((state) => state.setConnectionState);
   const addConsoleOutput = useEditorStore((state) => state.addConsoleOutput);
   const pythonCode = useEditorStore((state) => state.pythonCode);
+  const viewMode = useEditorStore((state) => state.viewMode);
+  const setViewMode = useEditorStore((state) => state.setViewMode);
+  const isRightDrawerOpen = useEditorStore((state) => state.isRightDrawerOpen);
+  const setIsRightDrawerOpen = useEditorStore((state) => state.setIsRightDrawerOpen);
 
   const handleConnect = async (type: "bluetooth" | "serial" | "simulation") => {
     setConnectionState("connecting");
     let provider;
     if (type === "bluetooth") provider = new BluetoothProvider();
     else if (type === "serial") provider = new SerialProvider();
-    else provider = new SimulationProvider();
+    else {
+      provider = new SimulationProvider();
+      setIsRightDrawerOpen(true); // Auto-open drawer for simulation
+    }
     
     const success = await provider.connect(addConsoleOutput);
     if (success) {
@@ -32,39 +39,105 @@ export function HardwareToolbar() {
     if (activeConnection) {
       addConsoleOutput("> Running code...\n");
       activeConnection.executePython(pythonCode);
+      if (activeConnection.type === 'simulation') {
+        setIsRightDrawerOpen(true);
+      }
     }
   };
 
   return (
-    <div className="h-12 border-b bg-zinc-950 flex items-center px-4 gap-4 shrink-0">
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-medium">Connect Robot:</span>
-        <Button variant="outline" size="sm" onClick={() => handleConnect("bluetooth")} disabled={connectionState !== "disconnected"}>
-          <Bluetooth className="w-4 h-4 mr-2" />
-          Bluetooth
+    <div id="hardware-toolbar" className="h-14 border-b glass flex items-center px-4 gap-4 shrink-0">
+      <div className="flex items-center gap-3">
+        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Connect Robot</span>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => handleConnect("bluetooth")} disabled={connectionState !== "disconnected"} className="hover:border-blue-500/50 hover:bg-blue-500/10 transition-all">
+            <Bluetooth className="w-3.5 h-3.5 mr-2" />
+            Bluetooth
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => handleConnect("serial")} disabled={connectionState !== "disconnected"} className="hover:border-purple-500/50 hover:bg-purple-500/10 transition-all">
+            <Usb className="w-3.5 h-3.5 mr-2" />
+            Serial
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => handleConnect("simulation")} disabled={connectionState !== "disconnected"} className="hover:border-orange-500/50 hover:bg-orange-500/10 transition-all">
+            <PlaySquare className="w-3.5 h-3.5 mr-2" />
+            Simulation
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-1 bg-muted/30 p-1 rounded-md border shadow-inner">
+        <Button 
+          variant={viewMode === "blocks" ? "secondary" : "ghost"} 
+          size="sm" 
+          onClick={() => setViewMode("blocks")}
+          className={`h-8 px-3 transition-all ${viewMode === "blocks" ? "shadow-sm bg-background" : ""}`}
+        >
+          <LayoutGrid className="w-3.5 h-3.5 mr-2" />
+          Blocks
         </Button>
-        <Button variant="outline" size="sm" onClick={() => handleConnect("serial")} disabled={connectionState !== "disconnected"}>
-          <Usb className="w-4 h-4 mr-2" />
-          Serial
+        <Button 
+          variant={viewMode === "text" ? "secondary" : "ghost"} 
+          size="sm" 
+          onClick={() => setViewMode("text")}
+          className={`h-8 px-3 transition-all ${viewMode === "text" ? "shadow-sm bg-background" : ""}`}
+        >
+          <Type className="w-3.5 h-3.5 mr-2" />
+          Text
         </Button>
-        <Button variant="outline" size="sm" onClick={() => handleConnect("simulation")} disabled={connectionState !== "disconnected"}>
-          <PlaySquare className="w-4 h-4 mr-2" />
-          Simulation
+        <Button 
+          variant={viewMode === "split" ? "secondary" : "ghost"} 
+          size="sm" 
+          onClick={() => setViewMode("split")}
+          className={`h-8 px-3 transition-all ${viewMode === "split" ? "shadow-sm bg-background" : ""}`}
+        >
+          <Columns className="w-3.5 h-3.5 mr-2" />
+          Split
         </Button>
       </div>
       
-      <div className="ml-auto flex items-center gap-4">
-        <Button variant="default" size="sm" onClick={handleRunCode} disabled={connectionState !== "connected"} className="bg-green-600 hover:bg-green-700">
-          <Play className="w-4 h-4 mr-2" />
-          Run Code
+      <div className="h-8 w-px bg-border mx-2" />
+
+      <div className="flex items-center gap-2">
+        <Button
+          variant={isRightDrawerOpen ? "secondary" : "ghost"}
+          size="sm"
+          onClick={() => setIsRightDrawerOpen(!isRightDrawerOpen)}
+          className={`h-8 gap-2 transition-all ${isRightDrawerOpen ? "text-primary bg-primary/10 border-primary/20" : ""}`}
+        >
+          <PanelRightOpen className={`w-4 h-4 transition-transform ${isRightDrawerOpen ? "rotate-180" : ""}`} />
+          <span className="text-xs font-semibold">Tools</span>
+        </Button>
+
+        <Button
+          variant={isConsoleOpen ? "secondary" : "ghost"}
+          size="sm"
+          onClick={() => setIsConsoleOpen(!isConsoleOpen)}
+          className={`h-8 gap-2 transition-all ${isConsoleOpen ? "text-primary bg-primary/10 border-primary/20" : ""}`}
+        >
+          <Terminal className="w-4 h-4" />
+          <span className="text-xs font-semibold">Terminal</span>
+        </Button>
+      </div>
+      
+      <div className="ml-auto flex items-center gap-6">
+
+        <Button 
+          variant="default" 
+          size="sm" 
+          onClick={handleRunCode} 
+          disabled={connectionState !== "connected"} 
+          className="bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20 px-6 font-bold"
+        >
+          <Play className="w-4 h-4 mr-2 fill-current" />
+          Run
         </Button>
         
-        <div className="flex items-center gap-2">
-          <div className={`w-3 h-3 rounded-full ${
-            connectionState === "connected" ? "bg-green-500" :
-            connectionState === "connecting" ? "bg-yellow-500" : "bg-red-500"
+        <div className="flex items-center gap-2 border-l pl-6 h-8">
+          <div className={`w-2.5 h-2.5 rounded-full ${
+            connectionState === "connected" ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse" :
+            connectionState === "connecting" ? "bg-yellow-500 animate-bounce" : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]"
           }`} />
-          <span className="text-sm text-muted-foreground capitalize">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
             {connectionState}
           </span>
         </div>

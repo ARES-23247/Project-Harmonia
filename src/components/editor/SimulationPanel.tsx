@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import Matter from "matter-js";
 
-export function SimulationPanel() {
+export default function SimulationPanel() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<Matter.Engine | null>(null);
   const robotRef = useRef<Matter.Body | null>(null);
@@ -32,7 +32,7 @@ export function SimulationPanel() {
         width: 800,
         height: 600,
         wireframes: false,
-        background: '#18181b', // zinc-950
+        background: 'transparent',
       }
     });
 
@@ -100,8 +100,22 @@ export function SimulationPanel() {
   }, []);
 
   return (
-    <div className="w-full h-full flex items-center justify-center bg-zinc-950 overflow-hidden">
-      <canvas ref={canvasRef} className="border border-zinc-800 rounded-lg shadow-xl" />
+    <div className="w-full h-full flex flex-col overflow-hidden bg-card">
+      <div className="h-9 flex items-center px-3 border-b bg-muted/10 shrink-0">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Simulation</span>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="h-6 w-6 ml-auto hover:bg-primary/10 transition-colors" 
+          onClick={() => togglePopOut("simulation")}
+          title="Pop Out"
+        >
+          <ExternalLink className="w-3 h-3 text-primary" />
+        </Button>
+      </div>
+      <div id="simulation-panel" className="flex-1 flex items-center justify-center overflow-hidden p-4">
+        <canvas ref={canvasRef} className="max-w-full max-h-full border border-border rounded-xl shadow-2xl bg-zinc-950/20 backdrop-blur-sm" />
+      </div>
     </div>
   );
 }

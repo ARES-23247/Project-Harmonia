@@ -1,7 +1,7 @@
 import { useEditorStore } from "@/store/editorStore";
 import { useEffect, useRef } from "react";
 
-export function ConsolePanel() {
+export default function ConsolePanel() {
   const consoleOutput = useEditorStore((state) => state.consoleOutput);
   const clearConsoleOutput = useEditorStore((state) => state.clearConsoleOutput);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -11,16 +11,16 @@ export function ConsolePanel() {
   }, [consoleOutput]);
 
   return (
-    <div className="w-full h-full bg-zinc-950 flex flex-col font-mono text-sm border-t border-border">
-      <div className="flex items-center justify-between px-4 py-1 bg-zinc-900 border-b border-border shrink-0">
-        <span className="text-zinc-400">Terminal Output</span>
-        <button onClick={clearConsoleOutput} className="text-zinc-500 hover:text-zinc-300 transition-colors">
+    <div className="w-full h-full bg-card flex flex-col font-mono text-xs border-t border-border">
+      <div className="flex items-center justify-between px-4 py-1.5 glass border-b border-border shrink-0">
+        <span className="text-muted-foreground font-semibold uppercase tracking-wider text-[10px]">Terminal</span>
+        <button onClick={clearConsoleOutput} className="text-muted-foreground hover:text-foreground transition-colors text-[10px] uppercase font-bold">
           Clear
         </button>
       </div>
-      <div className="flex-1 overflow-auto p-4 text-green-400">
+      <div className="flex-1 overflow-auto p-4 text-foreground/80 selection:bg-primary selection:text-primary-foreground">
         {consoleOutput.map((line, i) => (
-          <div key={i} className="whitespace-pre-wrap">{line}</div>
+          <div key={i} className="whitespace-pre-wrap mb-0.5">{line}</div>
         ))}
         <div ref={bottomRef} />
       </div>
