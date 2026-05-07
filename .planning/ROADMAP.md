@@ -23,7 +23,7 @@
   3. User can scroll through palette by category to find all available blocks
   4. User can pan workspace using scroll wheel and zoom using Ctrl+scroll
   5. User sees clear visual feedback on hover, selection, and valid drop targets
-**Plans**: TBD
+**Plans**: 1
 
 ### Phase 10: Accessibility Foundation
 **Goal:** Users can navigate and use the IDE with keyboard, screen readers, and visual accommodations
