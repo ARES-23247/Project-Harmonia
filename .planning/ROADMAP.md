@@ -5,7 +5,7 @@
 
 ## Phases
 
-- [ ] **Phase 9: Block Editor Foundation** - Fix core drag-drop, palette, and workspace navigation
+- [x] **Phase 9: Block Editor Foundation** - Fix core drag-drop, palette, and workspace navigation
 - [ ] **Phase 10: Accessibility Foundation** - WCAG compliance, themes, and keyboard navigation
 - [ ] **Phase 11: UI Polish & Animations** - Theme system, animations, and loading states
 - [ ] **Phase 12: Interactive Onboarding** - First-run tutorial with skip/replay
@@ -74,7 +74,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 9. Block Editor Foundation | 0/5 | Not started | - |
+| 9. Block Editor Foundation | 1/1 | Complete | 2026-05-07 |
 | 10. Accessibility Foundation | 0/5 | Not started | - |
 | 11. UI Polish & Animations | 0/4 | Not started | - |
 | 12. Interactive Onboarding | 0/3 | Not started | - |
