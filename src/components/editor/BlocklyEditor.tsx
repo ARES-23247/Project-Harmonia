@@ -2,123 +2,77 @@ import { useEffect, useRef } from "react";
 import * as Blockly from "blockly";
 import { pythonGenerator } from "blockly/python";
 import { useEditorStore } from "@/store/editorStore";
-import { registerRobotBlocks } from "@/lib/blocks/robotBlocks";
-import { registerRobotGenerators } from "@/lib/blocks/robotGenerators";
-import { registerLegoBlocks } from "@/lib/blocks/legoBlocks";
-import { registerLegoGenerators } from "@/lib/blocks/legoGenerators";
+import { useBlockStore } from "@/store/blockStore";
+import { initializeWorkspace } from "@/lib/blocks/workspaceManager";
 
 export function BlocklyEditor() {
   const blocklyDiv = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  
   const setPythonCode = useEditorStore((state) => state.setPythonCode);
   const setBlocklyWorkspace = useEditorStore((state) => state.setBlocklyWorkspace);
+  
+  const setStoreWorkspace = useBlockStore((state) => state.setWorkspace);
+  const setIsDragging = useBlockStore((state) => state.setIsDragging);
 
   useEffect(() => {
     if (!blocklyDiv.current) return;
 
-    registerRobotBlocks();
-    registerRobotGenerators();
-    registerLegoBlocks();
-    registerLegoGenerators();
-
-    const workspace = Blockly.inject(blocklyDiv.current, {
-      toolbox: {
-        kind: "categoryToolbox",
-        contents: [
-          {
-            kind: "category",
-            name: "🤖 Robot",
-            colour: "230",
-            contents: [
-              { kind: "block", type: "harmonia_drive" },
-              { kind: "block", type: "harmonia_sleep" },
-            ],
-          },
-          {
-            kind: "category",
-            name: "🧱 Advanced Lego",
-            colour: "290",
-            contents: [
-              { kind: "block", type: "lego_motor_run_target" },
-              { kind: "block", type: "lego_motor_run_stalled" },
-              { kind: "block", type: "lego_color_sensor" },
-            ],
-          },
-          {
-            kind: "category",
-            name: "🎮 Gamepad",
-            colour: "160",
-            contents: [
-              { kind: "block", type: "gamepad_get_button" },
-              { kind: "block", type: "gamepad_get_axis" },
-            ],
-          },
-          {
-            kind: "category",
-            name: "Logic",
-            colour: "210",
-            contents: [
-              { kind: "block", type: "controls_if" },
-              { kind: "block", type: "logic_compare" },
-              { kind: "block", type: "logic_operation" },
-              { kind: "block", type: "logic_boolean" },
-            ],
-          },
-          {
-            kind: "category",
-            name: "Loops",
-            colour: "120",
-            contents: [
-              { kind: "block", type: "controls_repeat_ext" },
-              { kind: "block", type: "controls_whileUntil" },
-            ],
-          },
-          {
-            kind: "category",
-            name: "Math",
-            colour: "230",
-            contents: [
-              { kind: "block", type: "math_number" },
-              { kind: "block", type: "math_arithmetic" },
-            ],
-          },
-          {
-            kind: "category",
-            name: "Text",
-            colour: "160",
-            contents: [
-              { kind: "block", type: "text" },
-              { kind: "block", type: "text_print" },
-            ],
-          },
-        ],
-      },
-    });
-
+    // Initialize workspace using centralized manager
+    const workspace = initializeWorkspace(blocklyDiv.current);
+    
+    // Sync with stores
     setBlocklyWorkspace(workspace);
+    setStoreWorkspace(workspace);
 
+    // Responsive handling
     const resizeObserver = new ResizeObserver(() => {
       Blockly.svgResize(workspace);
     });
-    if (blocklyDiv.current) {
-      resizeObserver.observe(blocklyDiv.current);
+    
+    if (wrapperRef.current) {
+      resizeObserver.observe(wrapperRef.current);
     }
 
+    // Change listener for code generation
     const onWorkspaceChange = (event: any) => {
-      // Don't generate code for purely UI events to prevent lag
+      // Track drag state
+      if (event.type === Blockly.Events.BLOCK_DRAG) {
+        setIsDragging(event.isStart);
+      }
+      
+      // Prevent code generation lag on purely UI events
       if (event.isUiEvent) return;
       
-      const code = pythonGenerator.workspaceToCode(workspace);
-      setPythonCode(code || "# Drag blocks to generate code.");
+      try {
+        const code = pythonGenerator.workspaceToCode(workspace);
+        setPythonCode(code || "# Drag blocks to generate code.");
+      } catch (err) {
+        console.error("Blockly code generation error:", err);
+      }
     };
 
     workspace.addChangeListener(onWorkspaceChange);
+
+    // Initial code generation
+    const initialCode = pythonGenerator.workspaceToCode(workspace);
+    setPythonCode(initialCode || "# Drag blocks to generate code.");
 
     return () => {
       resizeObserver.disconnect();
       workspace.removeChangeListener(onWorkspaceChange);
       workspace.dispose();
+      setStoreWorkspace(null);
     };
-  }, [setBlocklyWorkspace, setPythonCode]);
+  }, [setBlocklyWorkspace, setPythonCode, setStoreWorkspace, setIsDragging]);
 
-  return <div ref={blocklyDiv} className="w-full h-full" />;
+  return (
+    <div ref={wrapperRef} className="workspace-container">
+      <div 
+        ref={blocklyDiv} 
+        className="blockly-wrapper" 
+        id="blocklyEditor"
+      />
+    </div>
+  );
 }

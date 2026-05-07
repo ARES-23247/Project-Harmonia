@@ -23,7 +23,8 @@ export function registerRobotBlocks() {
       this.appendValueInput("SECONDS")
         .setCheck("Number")
         .appendField("Wait for");
-      this.appendField("seconds");
+      this.appendDummyInput()
+        .appendField("seconds");
       this.setInputsInline(true);
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
