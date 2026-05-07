@@ -1,46 +1,43 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: UX Foundation & Block Fixes
+milestone: v1.2
+milestone_name: IDE Layout & Real Estate Architecture
 status: planning
-last_updated: "2026-05-07T00:10:00Z"
+last_updated: "2026-05-07T08:00:00Z"
 last_activity: 2026-05-07
 progress:
-  total_phases: 5
-  completed_phases: 1
-  total_plans: 1
-  completed_plans: 1
-  percent: 20
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-05-06)
+See: .planning/PROJECT.md (updated 2026-05-07)
 
 **Core value:** To provide a frictionless, 100% free, "write once, run anywhere" educational coding platform that eliminates the barriers between different robotic hardware ecosystems.
-**Current focus:** Establish polished, accessible, performant user experience for v1.1
+**Current focus:** Developing dynamic editor views and collapsible UI drawers to maximize screen real estate.
 
-## Previous Milestone: v1.0
+## Previous Milestone: v1.1
 
-**Status:** Complete (8 phases)
+**Status:** Complete (5 phases)
 **Delivered:**
-- Core IDE & Authentication
-- Editor Engine & AST Foundation
-- Hardware Connection & Universal API
-- Simulation & Virtual Physics
-- Collaboration & GitHub Cloud
-- Telemetry, AI, & Classroom Tools
-- Robot Blocks & Hardware Integration
-- Pybricks Parity
+- Block Editor stability
+- Accessibility foundation & Themes
+- UI Polish & Animations
+- Interactive Onboarding
+- Performance Optimization (Code Splitting)
 
 ## Current Position
 
-**Phase:** Phase 9 - Block Editor Foundation (Complete)
-**Plan:** 1 of 1 (09-01-SUMMARY.md)
-**Status:** Phase 9 complete, ready for Phase 10
-**Last activity:** 2026-05-07 — Phase 9 foundation implemented and verified
+Phase: Phase 17 - Dynamic Editor Views
+Plan: TBD
+Status: Ready for execution
+Last activity: 2026-05-07 — Finished v1.2 initialization, ready for Phase 17
 
 ## Accumulated Context
 
@@ -54,8 +51,8 @@ See: .planning/PROJECT.md (updated 2026-05-06)
 - **v1.1 Decision**: CSS isolation layer used to resolve workspace/UI stacking conflicts.
 
 ### v1.1 Milestone Context
-- **Status**: Phase 9 resolved the core drag-drop and palette blockers.
-- **Next**: Phase 10 will address Accessibility Foundation.
+- **Status**: Phase 10 established the accessibility and theme foundation.
+- **Next**: Phase 11 will address UI Polish & Animations.
 
 ---
 *Last updated: 2026-05-07*

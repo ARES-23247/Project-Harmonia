@@ -4,16 +4,15 @@
 
 A universal, web-based robotics IDE designed for educational environments. It brings together disparate hardware platforms (Lego Pybricks, XRP, Rev IQ) under a single, seamless coding experience featuring two-way Block-to-Text synchronization, interactive simulator environments, and integrated classroom tools.
 
-## Current Milestone: v1.1 UX Foundation & Block Fixes
+## Current Milestone: v1.2 IDE Layout & Real Estate Architecture
 
-**Goal:** Fix core block coding functionality and establish a polished, accessible, performant user experience.
+**Goal:** Redesign the Universal IDE interface to maximize screen real estate using collapsible drawers, dynamic view toggles, and pop-out capabilities.
 
 **Target features:**
-- Block Fixes: Fix drag-drop, static palette, core Blockly integration
-- UI Polish: Visual design refinement, animations, component consistency, theme support
-- Performance: Load times, editor responsiveness, large project handling
-- Accessibility: Screen reader support, keyboard navigation, high contrast modes
-- Onboarding: Interactive tutorials, improved first-run experience
+- Dynamic Editor Views: Clean toggle between Blocks, Text, and Split View (editor takes 100% vertical height).
+- Collapsible Simulator & Telemetry Drawer: Right-side sliding drawer for running simulations and data.
+- Pop-out Modal Support: Option to detach the drawer contents into a floating modal/window.
+- Collapsible Bottom Console: easily hid/shown terminal output.
 
 ## Requirements
 
