@@ -78,7 +78,7 @@ export const WORKSPACE_CONFIG: any = {
         contents: [
           { kind: "block", type: "robot_drive_straight", inputs: { DIST: { kind: "shadow", type: "math_number", fields: { NUM: 10 } }, SPEED: { kind: "shadow", type: "math_number", fields: { NUM: 0.5 } } } },
           { kind: "block", type: "robot_drive_turn", inputs: { ANGLE: { kind: "shadow", type: "math_number", fields: { NUM: 90 } }, SPEED: { kind: "shadow", type: "math_number", fields: { NUM: 0.5 } } } },
-          { kind: "block", type: "robot_drive_arcade" },
+          { kind: "block", type: "robot_drive_arcade", inputs: { STRAIGHT: { kind: "shadow", type: "math_number", fields: { NUM: 0.5 } }, TURN: { kind: "shadow", type: "math_number", fields: { NUM: 0 } } } },
           { kind: "block", type: "robot_stop" },
         ],
       },
@@ -107,6 +107,10 @@ export const WORKSPACE_CONFIG: any = {
         name: "XRP Features",
         colour: "120",
         contents: [
+          { kind: "block", type: "xrp_straight_effort", inputs: { dist: { kind: "shadow", type: "math_number", fields: { NUM: 10 } }, effort: { kind: "shadow", type: "math_number", fields: { NUM: 0.5 } } } },
+          { kind: "block", type: "xrp_turn_effort", inputs: { degrees: { kind: "shadow", type: "math_number", fields: { NUM: 90 } }, effort: { kind: "shadow", type: "math_number", fields: { NUM: 0.5 } } } },
+          { kind: "block", type: "xrp_arcade", inputs: { STRAIGHT: { kind: "shadow", type: "math_number", fields: { NUM: 0.5 } }, TURN: { kind: "shadow", type: "math_number", fields: { NUM: 0 } } } },
+          { kind: "block", type: "xrp_motor_effort", inputs: { effort: { kind: "shadow", type: "math_number", fields: { NUM: 0.5 } } } },
           { kind: "block", type: "xrp_servo_deg", inputs: { degrees: { kind: "shadow", type: "math_number", fields: { NUM: 90 } } } },
           { kind: "sep" },
           { kind: "block", type: "xrp_led_on" },
@@ -119,8 +123,8 @@ export const WORKSPACE_CONFIG: any = {
         name: "Lego Features",
         colour: "20",
         contents: [
-          { kind: "block", type: "lego_motor_run_target" },
-          { kind: "block", type: "lego_motor_run_stalled" },
+          { kind: "block", type: "lego_motor_run_target", inputs: { SPEED: { kind: "shadow", type: "math_number", fields: { NUM: 500 } }, TARGET: { kind: "shadow", type: "math_number", fields: { NUM: 90 } } } },
+          { kind: "block", type: "lego_motor_run_stalled", inputs: { SPEED: { kind: "shadow", type: "math_number", fields: { NUM: 500 } } } },
         ],
       },
       { kind: "sep" },
