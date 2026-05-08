@@ -1,7 +1,11 @@
 import { useEffect, useRef } from "react";
 import Matter from "matter-js";
+import { Button } from "@/components/ui/button";
+import { ExternalLink } from "lucide-react";
+import { useEditorStore } from "@/store/editorStore";
 
 export default function SimulationPanel() {
+  const togglePopOut = useEditorStore((state) => state.togglePopOut);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<Matter.Engine | null>(null);
   const robotRef = useRef<Matter.Body | null>(null);

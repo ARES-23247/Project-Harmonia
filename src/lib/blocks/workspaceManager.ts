@@ -5,6 +5,8 @@ import { registerRobotGenerators } from "./robotGenerators";
 import { registerLegoGenerators } from "./legoGenerators";
 import { KeyboardNavigation } from "@blockly/keyboard-navigation";
 
+import Theme from "@blockly/theme-dark";
+
 // Register keyboard navigation styles and deferring toolbox once at module level
 if (typeof window !== "undefined" && !(window as any).__keyboard_nav_registered) {
   try {
@@ -17,6 +19,7 @@ if (typeof window !== "undefined" && !(window as any).__keyboard_nav_registered)
 }
 
 export const WORKSPACE_CONFIG: any = {
+  theme: Theme,
   toolbox: {
     kind: "categoryToolbox",
     contents: [
@@ -92,7 +95,7 @@ export const WORKSPACE_CONFIG: any = {
   grid: {
     spacing: 20,
     length: 3,
-    colour: "#ccc",
+    colour: "#444",
     snap: true,
   },
   move: {
@@ -125,12 +128,14 @@ export function initializeWorkspace(container: HTMLElement): Blockly.WorkspaceSv
 
   const workspace = Blockly.inject(container, WORKSPACE_CONFIG);
   
+/*
   try {
     // Enable keyboard navigation for the workspace
     new KeyboardNavigation(workspace);
   } catch (err) {
     console.error("Failed to initialize KeyboardNavigation:", err);
   }
+*/
   
   // Register ARIA live announcer for screen readers
   workspace.addChangeListener((event) => {

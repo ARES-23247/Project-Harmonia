@@ -118,7 +118,7 @@ export default function BlocklyEditor() {
   }, [setBlocklyWorkspace, setPythonCode, setStoreWorkspace, setIsDragging, setIsLoading]);
 
   return (
-    <div ref={wrapperRef} className="workspace-container bg-background">
+    <div ref={wrapperRef} className="workspace-container bg-background h-full">
       {isLoading && (
         <div className="absolute inset-0 z-50 p-8 flex flex-col gap-6 bg-background animate-in fade-in duration-500">
           <div className="flex gap-4">
@@ -145,7 +145,7 @@ export default function BlocklyEditor() {
       )}
       <div 
         ref={blocklyDiv} 
-        className={`blockly-wrapper transition-opacity duration-700 ${isLoading ? 'opacity-0' : 'opacity-1'}`}
+        className={`blockly-wrapper h-full transition-opacity duration-700 ${isLoading ? 'opacity-0' : 'opacity-1'}`}
         id="blocklyEditor"
       />
     </div>

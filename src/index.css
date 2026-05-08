@@ -95,24 +95,16 @@
   }
 }
 
-/* Blockly Isolation & Layering */
 .blockly-wrapper {
-  isolation: isolate;
   z-index: 0;
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 
-.blockly-wrapper > div {
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-.blocklySvg {
-  position: relative !important;
-  z-index: 2 !important;
+/* Ensure flyout is visible and on top */
+.blocklyFlyout {
+  z-index: 100 !important;
 }
 
 /* Fix for flyout/toolbox being behind main workspace */
@@ -126,4 +118,5 @@
   position: relative;
   min-height: 0;
   width: 100%;
+  height: 100%;
 }

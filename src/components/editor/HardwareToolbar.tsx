@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Bluetooth, Usb, PlaySquare, Play, LayoutGrid, Type, Columns, PanelRightOpen, Terminal } from "lucide-react";
+import { Bluetooth, Usb, PlaySquare, Play, LayoutGrid, Type, Columns, PanelRightOpen, Terminal, RotateCcw } from "lucide-react";
 import { useEditorStore } from "@/store/editorStore";
 import { BluetoothProvider } from "@/lib/hardware/bluetooth";
 import { SerialProvider } from "@/lib/hardware/serial";
@@ -15,6 +15,9 @@ export function HardwareToolbar() {
   const setViewMode = useEditorStore((state) => state.setViewMode);
   const isRightDrawerOpen = useEditorStore((state) => state.isRightDrawerOpen);
   const setIsRightDrawerOpen = useEditorStore((state) => state.setIsRightDrawerOpen);
+  const isConsoleOpen = useEditorStore((state) => state.isConsoleOpen);
+  const setIsConsoleOpen = useEditorStore((state) => state.setIsConsoleOpen);
+  const resetLayout = useEditorStore((state) => state.resetLayout);
 
   const handleConnect = async (type: "bluetooth" | "serial" | "simulation") => {
     setConnectionState("connecting");
@@ -116,6 +119,17 @@ export function HardwareToolbar() {
         >
           <Terminal className="w-4 h-4" />
           <span className="text-xs font-semibold">Terminal</span>
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={resetLayout}
+          className="h-8 gap-2 hover:text-primary transition-all"
+          title="Reset Layout"
+        >
+          <RotateCcw className="w-3.5 h-3.5" />
+          <span className="text-xs font-semibold">Reset</span>
         </Button>
       </div>
       

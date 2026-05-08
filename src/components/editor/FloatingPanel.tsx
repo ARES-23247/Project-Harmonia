@@ -4,6 +4,7 @@ import { Minimize2, GripHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { useThemeStore } from "@/store/themeStore";
 
 interface FloatingPanelProps {
   id: string;
@@ -13,15 +14,16 @@ interface FloatingPanelProps {
 }
 
 export function FloatingPanel({ id, title, children, defaultPosition = { x: 100, y: 100 } }: FloatingPanelProps) {
+  const { theme } = useThemeStore();
   const togglePopOut = useEditorStore((state) => state.togglePopOut);
-
+  
   const panel = (
     <motion.div
       drag
       dragMomentum={false}
       dragElastic={0}
       initial={defaultPosition}
-      className="fixed z-[100] w-[450px] min-h-[300px] bg-card border shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-xl overflow-hidden flex flex-col border-primary/20"
+      className={`fixed top-0 left-0 z-[100] w-[450px] min-h-[300px] bg-card border shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-xl overflow-hidden flex flex-col border-primary/20 ${theme}`}
       style={{ touchAction: "none" }}
     >
       <div className="h-10 bg-muted/40 border-b flex items-center px-3 cursor-grab active:cursor-grabbing shrink-0 group select-none">

@@ -76,10 +76,19 @@ function HomePage() {
 }
 
 export default function App() {
+  const { theme } = useThemeStore();
+
   useEffect(() => {
     startGamepadPolling();
     return () => stopGamepadPolling();
   }, []);
+
+  useEffect(() => {
+    // Sync theme with document element for Tailwind dark mode and portal support
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark', 'high-contrast');
+    root.classList.add(theme);
+  }, [theme]);
 
   return (
     <Router>

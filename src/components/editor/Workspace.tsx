@@ -5,7 +5,7 @@ import { HardwareToolbar } from "./HardwareToolbar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CollaborationProvider } from "./CollaborationContext";
 import { useEditorStore } from "@/store/editorStore";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { OnboardingTour } from "../onboarding/OnboardingTour";
 import { useOnboardingStore } from "@/store/onboardingStore";
 import { SideDrawer } from "./SideDrawer";
@@ -114,22 +114,6 @@ export function Workspace() {
               </Panel>
             </PanelGroup>
 
-            {/* Floating Panels */}
-            {isSimPopped && (
-              <FloatingPanel id="simulation" title="Simulation" defaultPosition={{ x: window.innerWidth - 500, y: 100 }}>
-                <Suspense fallback={<PanelFallback />}>
-                  <SimulationPanel />
-                </Suspense>
-              </FloatingPanel>
-            )}
-            {isTelePopped && (
-              <FloatingPanel id="telemetry" title="Telemetry" defaultPosition={{ x: window.innerWidth - 500, y: 450 }}>
-                <Suspense fallback={<PanelFallback />}>
-                  <TelemetryPanel />
-                </Suspense>
-              </FloatingPanel>
-            )}
-
             {/* Auxiliary Side Drawer */}
             <SideDrawer>
               <PanelGroup orientation="vertical">
@@ -156,7 +140,6 @@ export function Workspace() {
                         </Suspense>
                       </div>
                     )}
-                    {/* Copilot/AI could go here too */}
                   </div>
                 </Panel>
               </PanelGroup>
@@ -172,6 +155,24 @@ export function Workspace() {
         </div>
         
         <OnboardingTour />
+
+        {/* Floating Panels - Rendered outside main layout to avoid clipping */}
+        <AnimatePresence mode="popLayout">
+          {isSimPopped && (
+            <FloatingPanel id="simulation" title="Simulation" defaultPosition={{ x: window.innerWidth - 500, y: 100 }}>
+              <Suspense fallback={<PanelFallback />}>
+                <SimulationPanel />
+              </Suspense>
+            </FloatingPanel>
+          )}
+          {isTelePopped && (
+            <FloatingPanel id="telemetry" title="Telemetry" defaultPosition={{ x: window.innerWidth - 500, y: 450 }}>
+              <Suspense fallback={<PanelFallback />}>
+                <TelemetryPanel />
+              </Suspense>
+            </FloatingPanel>
+          )}
+        </AnimatePresence>
       </motion.div>
     </CollaborationProvider>
   );

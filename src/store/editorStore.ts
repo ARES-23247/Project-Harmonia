@@ -39,6 +39,7 @@ interface EditorState {
   setIsRightDrawerOpen: (open: boolean) => void;
   togglePopOut: (panelId: string) => void;
   setIsConsoleOpen: (open: boolean) => void;
+  resetLayout: () => void;
 }
 
 let saveTimeout: any = null;
@@ -102,6 +103,12 @@ export const useEditorStore = create<EditorState>()(
           : [...state.poppedOutPanels, panelId]
       })),
       setIsConsoleOpen: (open) => set({ isConsoleOpen: open }),
+      resetLayout: () => set({ 
+        poppedOutPanels: [], 
+        isRightDrawerOpen: true,
+        isConsoleOpen: false,
+        viewMode: "split"
+      }),
     }),
     {
       name: "harmonia-editor-storage",
