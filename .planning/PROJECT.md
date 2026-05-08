@@ -4,21 +4,20 @@
 
 A universal, web-based robotics IDE designed for educational environments. It brings together disparate hardware platforms (Lego Pybricks, XRP, Rev IQ) under a single, seamless coding experience featuring two-way Block-to-Text synchronization, interactive simulator environments, and integrated classroom tools.
 
-## Current Milestone: v1.2 IDE Layout & Real Estate Architecture
+## Previous Milestone: v1.2 IDE Layout & Real Estate Architecture
+**Shipped:** 2026-05-08
+**Summary:** Unified the IDE interface with dynamic view toggles, collapsible right-side drawer, portal-based floating modals, and a fixed bottom console. Established classroom management backend.
 
-**Goal:** Redesign the Universal IDE interface to maximize screen real estate using collapsible drawers, dynamic view toggles, and pop-out capabilities.
-
-**Target features:**
-- Dynamic Editor Views: Clean toggle between Blocks, Text, and Split View (editor takes 100% vertical height).
-- Collapsible Simulator & Telemetry Drawer: Right-side sliding drawer for running simulations and data.
-- Pop-out Modal Support: Option to detach the drawer contents into a floating modal/window.
-- Collapsible Bottom Console: easily hid/shown terminal output.
+## Current Milestone: v1.3 (TBD)
+**Goal:** Define the next major feature set (e.g., Hardware Connectivity or Advanced Simulation).
 
 ## Requirements
 
 ### Validated
 
-(None yet — ship to validate)
+- **v1.2**: Dynamic Editor Views, Collapsible Drawers, Pop-out Modals, Bottom Console (Phases 17-20)
+- **v1.2**: Teacher Dashboard & Classroom Management Backend (Phase 14)
+- **v1.1**: Block Editor Foundation, Accessibility, UI Polish, Onboarding, Performance (Phases 9-13)
 
 ### Active
 
@@ -28,14 +27,9 @@ A universal, web-based robotics IDE designed for educational environments. It br
 - [ ] Real-time multiplayer collaboration for student teams using CRDTs (Yjs/Liveblocks).
 - [ ] Integrated browser-based simulator (Pyodide) with a 2D/3D physics engine and virtual sensor UI mocking.
 - [ ] Invisible version control and cloud saves backed by GitHub, with a simple history slider UI.
-- [ ] Teacher classroom features and dashboards.
-- [ ] BYOK AI Copilot integration for intelligent error translation and code assistance.
-- [ ] Progressive Web App (PWA) support for full offline functionality on Desktop/Tablets.
-- [ ] Open plugin marketplace for third-party extensions and hardware support.
-- [ ] HTML5 Gamepad and direct-to-robot Bluetooth controller support.
-- [ ] Visual hardware configuration UI for kinematics abstraction.
-- [ ] Built-in interactive tutorials and onboarding.
-- [ ] High-contrast, screen-reader compatible accessibility features with keyboard navigation.
+- [x] Teacher classroom features and dashboards. (Validated v1.2)
+- [x] Built-in interactive tutorials and onboarding. (Validated v1.1)
+- [x] High-contrast, screen-reader compatible accessibility features with keyboard navigation. (Validated v1.1)
 - [ ] Built-in telemetry recording and CSV exports.
 - [ ] Interactive MicroPython REPL terminal.
 
