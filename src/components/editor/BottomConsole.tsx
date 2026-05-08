@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEditorStore } from "@/store/editorStore";
 import { X, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface BottomConsoleProps {
   children: ReactNode;

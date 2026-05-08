@@ -12,18 +12,24 @@ import { KeyboardNavigation } from "@blockly/keyboard-navigation";
 
 import Theme from "@blockly/theme-dark";
 
+interface CustomWindow extends Window {
+  __keyboard_nav_registered?: boolean;
+}
+
+const customWindow = (typeof window !== "undefined" ? window : {}) as CustomWindow;
+
 // Register keyboard navigation styles and deferring toolbox once at module level
-if (typeof window !== "undefined" && !(window as any).__keyboard_nav_registered) {
+if (typeof window !== "undefined" && !customWindow.__keyboard_nav_registered) {
   try {
     KeyboardNavigation.registerKeyboardNavigationStyles();
     KeyboardNavigation.registerNavigationDeferringToolbox();
-    (window as any).__keyboard_nav_registered = true;
+    customWindow.__keyboard_nav_registered = true;
   } catch (err) {
     console.error("Failed to register KeyboardNavigation globals:", err);
   }
 }
 
-export const WORKSPACE_CONFIG: any = {
+export const WORKSPACE_CONFIG: Record<string, unknown> = {
   theme: Theme,
   toolbox: {
     kind: "categoryToolbox",
@@ -188,7 +194,7 @@ export function initializeWorkspace(container: HTMLElement): Blockly.WorkspaceSv
     } else if (event.type === Blockly.Events.BLOCK_DELETE) {
       announce("Block deleted.");
     } else if (event.type === Blockly.Events.BLOCK_MOVE) {
-      const moveEvent = event as any; // Cast for simplicity in this version
+      const moveEvent = event as Blockly.Events.BlockMove;
       if (moveEvent.newParentId) {
         announce("Blocks connected.");
       }

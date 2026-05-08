@@ -11,6 +11,7 @@ const PYBRICKS_SERVICE_UUID = "c5f50001-8280-46da-89f4-6d8051e4aeef";
 const PYBRICKS_CMD_CHAR_UUID = "c5f50002-8280-46da-89f4-6d8051e4aeef";
 
 export class BluetoothProvider implements ConnectionProvider {
+  type = "bluetooth" as const;
   private device: BluetoothDevice | null = null;
   private nusRxCharacteristic: BluetoothRemoteGATTCharacteristic | null = null;
   private pybricksCmdCharacteristic: BluetoothRemoteGATTCharacteristic | null = null;
@@ -32,10 +33,10 @@ export class BluetoothProvider implements ConnectionProvider {
       // 1. Setup Pybricks Command Service
       const pybricksService = await server.getPrimaryService(PYBRICKS_SERVICE_UUID);
       this.pybricksCmdCharacteristic = await pybricksService.getCharacteristic(PYBRICKS_CMD_CHAR_UUID);
-      
       await this.pybricksCmdCharacteristic.startNotifications();
-      this.pybricksCmdCharacteristic.addEventListener('characteristicvaluechanged', (event: any) => {
-        const view = new DataView(event.target.value.buffer);
+      this.pybricksCmdCharacteristic.addEventListener('characteristicvaluechanged', (event: Event) => {
+        const target = event.target as BluetoothRemoteGATTCharacteristic;
+        const view = new DataView(target.value!.buffer);
         // Pybricks Event Types: 0x00 is Status Report
         if (view.getUint8(0) === 0x00) {
            // const flags = view.getUint32(1, true); // Little endian
@@ -50,16 +51,18 @@ export class BluetoothProvider implements ConnectionProvider {
       const nusTxCharacteristic = await nusService.getCharacteristic(NUS_TX_CHAR_UUID);
 
       await nusTxCharacteristic.startNotifications();
-      nusTxCharacteristic.addEventListener('characteristicvaluechanged', (event: any) => {
-        const value = new TextDecoder().decode(event.target.value);
+      nusTxCharacteristic.addEventListener('characteristicvaluechanged', (event: Event) => {
+        const target = event.target as BluetoothRemoteGATTCharacteristic;
+        const value = new TextDecoder().decode(target.value!);
         this.onStdoutCb?.(value);
       });
 
       onStdout("Connected successfully!\n");
       return true;
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error(e);
-      onStdout("Bluetooth Connection Failed: " + e.message + "\n");
+      const msg = e instanceof Error ? e.message : String(e);
+      onStdout("Bluetooth Connection Failed: " + msg + "\n");
       return false;
     }
   }
@@ -110,8 +113,9 @@ export class BluetoothProvider implements ConnectionProvider {
       // Exit raw REPL and run (Ctrl-D)
       await this.writeNusChunk(new Uint8Array([4]));
       this.onStdoutCb?.("Download complete. Running...\n");
-    } catch (e: any) {
-      this.onStdoutCb?.("Error executing code: " + e.message + "\n");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      this.onStdoutCb?.("Error executing code: " + msg + "\n");
     }
   }
 

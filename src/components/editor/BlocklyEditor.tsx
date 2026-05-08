@@ -40,9 +40,9 @@ export default function BlocklyEditor() {
       // Change listener for code generation & Yjs Sync
       let isApplyingRemoteChange = false;
 
-      const onWorkspaceChange = (event: any) => {
+      const onWorkspaceChange = (event: Blockly.Events.Abstract) => {
         if (event.type === Blockly.Events.BLOCK_DRAG) {
-          setIsDragging(event.isStart);
+          setIsDragging((event as Blockly.Events.BlockDrag).isStart || false);
         }
         
         if (event.isUiEvent || isApplyingRemoteChange) return;
@@ -54,8 +54,8 @@ export default function BlocklyEditor() {
 
           // Sync to Yjs (if available)
           if (yblockly) {
-            const xmlDom = Blockly.Xml.workspaceToDom(workspace);
-            const xmlText = Blockly.Xml.domToText(xmlDom);
+            const xmlDom = (Blockly.Xml as Record<string, any>).workspaceToDom(workspace);
+            const xmlText = (Blockly.Xml as Record<string, any>).domToText(xmlDom);
             
             if (yblockly.toString() !== xmlText) {
               yblockly.delete(0, yblockly.length);
@@ -78,7 +78,7 @@ export default function BlocklyEditor() {
       workspace.addChangeListener(onWorkspaceChange);
 
       // Listen for remote Yjs changes
-      const yObserver = (event: Y.YTextEvent, transaction: Y.Transaction) => {
+      const yObserver = (_event: Y.YTextEvent, transaction: Y.Transaction) => {
         // If the change came from us locally, ignore it
         if (transaction.local) return;
 
@@ -86,9 +86,10 @@ export default function BlocklyEditor() {
         try {
           const xmlText = yblockly?.toString();
           if (xmlText) {
-            const xmlDom = Blockly.Xml.textToDom(xmlText);
-            Blockly.Xml.clearWorkspaceAndLoadFromXml(xmlDom, workspace);
-            
+            const xmlDom = (Blockly.Xml as Record<string, any>).textToDom(xmlText);
+            (Blockly.Xml as Record<string, any>).clearWorkspaceAndLoadFromXml(xmlDom, workspace);
+          }
+  
             // Generate code for local Monaco view since workspace changed
             const code = pythonGenerator.workspaceToCode(workspace);
             setPythonCode(code || "# Drag blocks to generate code.");
@@ -98,7 +99,6 @@ export default function BlocklyEditor() {
                 ymonaco.insert(0, code);
               }
             }
-          }
         } catch (e) {
           console.error("Failed to parse remote Blockly XML", e);
         } finally {
@@ -139,7 +139,7 @@ export default function BlocklyEditor() {
     }, 500); // 500ms for smooth transition
 
     return () => clearTimeout(timeout);
-  }, [setBlocklyWorkspace, setPythonCode, setStoreWorkspace, setIsDragging, setIsLoading]);
+  }, [setBlocklyWorkspace, setPythonCode, setStoreWorkspace, setIsDragging, setIsLoading, yblockly, ymonaco]);
 
   // Trigger code re-generation when hardware profile changes
   useEffect(() => {

@@ -2,6 +2,7 @@ import type { ConnectionProvider } from "@/lib/hardware/connectionManager";
 import { useEditorStore } from "@/store/editorStore";
 
 export class SimulationProvider implements ConnectionProvider {
+  type = "simulation" as const;
   private worker: Worker | null = null;
   private onStdoutCb: ((data: string) => void) | null = null;
   private storeUnsub: (() => void) | null = null;
@@ -31,9 +32,10 @@ export class SimulationProvider implements ConnectionProvider {
       });
 
       return true;
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error(e);
-      onStdout("Simulation Failed to Start: " + e.message + "\n");
+      const msg = e instanceof Error ? e.message : String(e);
+      onStdout("Simulation Failed to Start: " + msg + "\n");
       return false;
     }
   }

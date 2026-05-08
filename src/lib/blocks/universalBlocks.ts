@@ -62,7 +62,7 @@ export function registerUniversalBlocks() {
   };
 
   // --- Motors (Universal) ---
-  const portOptions = [
+  const portOptions: Blockly.MenuOption[] = [
     ["Port A", "A"],
     ["Port B", "B"],
     ["Port C", "C"],
@@ -128,7 +128,7 @@ export function registerUniversalBlocks() {
     init: function () {
       this.appendDummyInput()
         .appendField("Get Reflectance")
-        .appendField(new Blockly.FieldDropdown([["Left", "LEFT"], ["Right", "RIGHT"]]), "SIDE");
+        .appendField(new Blockly.FieldDropdown([["Left", "LEFT"], ["Right", "RIGHT"]] as Blockly.MenuOption[]), "SIDE");
       this.setOutput(true, "Number");
       this.setColour(65);
       this.setTooltip("Reads the reflectance sensor value.");

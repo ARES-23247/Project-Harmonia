@@ -1,8 +1,8 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEditorStore } from "@/store/editorStore";
-import { X, PanelRightClose, PanelRightOpen } from "lucide-react";
+import { X, PanelRightOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface SideDrawerProps {
   children: ReactNode;

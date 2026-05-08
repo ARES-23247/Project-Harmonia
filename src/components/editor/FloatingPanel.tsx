@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEditorStore } from "@/store/editorStore";
 import { Minimize2, GripHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useThemeStore } from "@/store/themeStore";
 

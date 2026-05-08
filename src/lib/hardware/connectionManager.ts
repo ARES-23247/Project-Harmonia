@@ -1,4 +1,5 @@
 export interface ConnectionProvider {
+  type: "bluetooth" | "serial" | "simulation";
   connect: (onStdout: (data: string) => void) => Promise<boolean>;
   disconnect: () => Promise<void>;
   executePython: (code: string) => Promise<void>;

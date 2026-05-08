@@ -18,7 +18,6 @@ const BlocklyEditor = lazy(() => import("./BlocklyEditor"));
 const SimulationPanel = lazy(() => import("./SimulationPanel"));
 const ConsolePanel = lazy(() => import("./ConsolePanel"));
 const TelemetryPanel = lazy(() => import("./TelemetryPanel"));
-const CopilotPanel = lazy(() => import("./CopilotPanel"));
 
 function PanelFallback() {
   return (

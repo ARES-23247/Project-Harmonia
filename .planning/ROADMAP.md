@@ -11,20 +11,21 @@
 
 ### Milestone v1.3: Community & Universal Abstraction
 - [x] Phase 21: About Us Branding & ARES Identity
-- [/] Phase 22: Universal Hardware HAL (Drivetrain, Motors, Sensors)
-- [ ] Phase 23: Profile-Driven Code Generation (XRP vs Lego vs REV)
+- [x] Phase 22: Universal Hardware HAL (Drivetrain, Motors, Sensors)
+- [x] Phase 23: Profile-Driven Code Generation (XRP vs Lego vs REV)
 - [ ] Phase 24: REPL Stability & Filesystem Sync
-- Integrate the branding trigger in the Hardware Toolbar.
 
-### Phase 22: XRP Core Hardware API
-**Goal**: Achieve foundational movement parity with the XRP platform.
-- Implement `DifferentialDrive` and `Motor` abstractions.
-- Map blocks to `XRPLib` singleton patterns.
+**Goal**: Achieve foundational movement and sensor parity across XRP and Lego platforms.
+- Implement universal `DifferentialDrive`, `Motor`, and `Sensor` abstractions.
+- Map blocks to platform-specific SDKs (XRPLib, Pybricks).
+- [x] Implemented universal block layer.
+- [x] Implemented profile-aware code generation.
+- [x] Fixed reactive workspace synchronization.
 
-### Phase 23: XRP Sensors & Servos
-**Goal**: Complete the XRP hardware surface.
-- Implement Rangefinder, Reflectance, and IMU sensor blocks.
-- Add support for all 4 servo ports with angle control.
+**Goal**: Establish the "Harmonia identity" and team branding.
+- [x] Created 'About Us' modal with ARES FTC 23247 context.
+- [x] Linked mythology to project goals.
+- [x] Integrated trigger in Hardware Toolbar.
 
 ### Phase 24: REPL Protocol & Filesystem Stability
 **Goal**: Implement a robust MicroPython communication layer.
@@ -48,6 +49,9 @@
 |-------|----------------|--------|-----------|
 | 14. Teacher Dashboard | 1/1 | Complete | 2026-05-08 |
 | 17-20. IDE Layout | 4/4 | Complete | 2026-05-08 |
+| 21. About Us | 1/1 | Complete | 2026-05-08 |
+| 22. Universal HAL | 1/1 | Complete | 2026-05-08 |
+| 23. Profile Gen | 1/1 | Complete | 2026-05-08 |
 
 ## Milestone v1.1 Archive
 

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Bluetooth, Usb, PlaySquare, Play, LayoutGrid, Type, Columns, PanelRightOpen, Terminal, RotateCcw, Shield, Bot, Cpu, Box } from "lucide-react";
+import { Bluetooth, Usb, PlaySquare, Play, LayoutGrid, Type, Columns, PanelRightOpen, Terminal, RotateCcw, Shield, Bot } from "lucide-react";
 import { useEditorStore } from "@/store/editorStore";
 import { BluetoothProvider } from "@/lib/hardware/bluetooth";
 import { SerialProvider } from "@/lib/hardware/serial";
@@ -69,7 +69,7 @@ export function HardwareToolbar() {
         <Bot className="w-4 h-4 text-muted-foreground ml-1" />
         <select 
           value={hardwareProfile}
-          onChange={(e) => setHardwareProfile(e.target.value as any)}
+          onChange={(e) => setHardwareProfile(e.target.value as "xrp" | "lego" | "rev")}
           className="bg-transparent text-sm font-medium focus:outline-none cursor-pointer pr-2"
         >
           <option value="xrp">XRP Robot</option>

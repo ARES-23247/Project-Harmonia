@@ -62,7 +62,7 @@ export function registerXrpBlocks() {
   };
 
   // --- Motor Blocks ---
-  const motorOptions = [
+  const motorOptions: Blockly.MenuOption[] = [
     ["Motor 1", "1"],
     ["Motor 2", "2"],
     ["Motor 3", "3"],
@@ -110,7 +110,7 @@ export function registerXrpBlocks() {
   };
 
   // --- Servo Blocks ---
-  const servoOptions = [
+  const servoOptions: Blockly.MenuOption[] = [
     ["Servo 1", "1"],
     ["Servo 2", "2"],
   ];

@@ -1,6 +1,7 @@
 import type { ConnectionProvider } from "./connectionManager";
 
 export class SerialProvider implements ConnectionProvider {
+  type = "serial" as const;
   private port: SerialPort | null = null;
 
   async connect(onStdout: (data: string) => void): Promise<boolean> {
@@ -11,9 +12,10 @@ export class SerialProvider implements ConnectionProvider {
       onStdout("Serial Port Selected and Opened.\n");
       onStdout("Connected!\n");
       return true;
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error(e);
-      onStdout("Serial Connection Failed: " + e.message + "\n");
+      const msg = e instanceof Error ? e.message : String(e);
+      onStdout("Serial Connection Failed: " + msg + "\n");
       return false;
     }
   }
