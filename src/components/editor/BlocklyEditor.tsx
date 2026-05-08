@@ -8,6 +8,14 @@ import { initializeWorkspace } from "@/lib/blocks/workspaceManager";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSharedCollaboration } from "./CollaborationContext";
 
+// Define a local interface for the Blockly XML API to avoid 'any' casts
+interface BlocklyXml {
+  workspaceToDom(workspace: Blockly.Workspace): Element;
+  domToText(xml: Element): string;
+  textToDom(text: string): Element;
+  clearWorkspaceAndLoadFromXml(xml: Element, workspace: Blockly.Workspace): void;
+}
+
 export default function BlocklyEditor() {
   const blocklyDiv = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -54,8 +62,8 @@ export default function BlocklyEditor() {
 
           // Sync to Yjs (if available)
           if (yblockly) {
-            const xmlDom = (Blockly.Xml as Record<string, any>).workspaceToDom(workspace);
-            const xmlText = (Blockly.Xml as Record<string, any>).domToText(xmlDom);
+            const xmlDom = (Blockly.Xml as unknown as BlocklyXml).workspaceToDom(workspace);
+            const xmlText = (Blockly.Xml as unknown as BlocklyXml).domToText(xmlDom);
             
             if (yblockly.toString() !== xmlText) {
               yblockly.delete(0, yblockly.length);
@@ -86,8 +94,8 @@ export default function BlocklyEditor() {
         try {
           const xmlText = yblockly?.toString();
           if (xmlText) {
-            const xmlDom = (Blockly.Xml as Record<string, any>).textToDom(xmlText);
-            (Blockly.Xml as Record<string, any>).clearWorkspaceAndLoadFromXml(xmlDom, workspace);
+            const xmlDom = (Blockly.Xml as unknown as BlocklyXml).textToDom(xmlText);
+            (Blockly.Xml as unknown as BlocklyXml).clearWorkspaceAndLoadFromXml(xmlDom, workspace);
           }
   
             // Generate code for local Monaco view since workspace changed
