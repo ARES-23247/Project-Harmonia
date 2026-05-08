@@ -9,6 +9,28 @@
 
 (Start a new milestone with /gsd-new-milestone)
 
+### Milestone v1.3: Community & Universal Abstraction
+- [x] Phase 21: About Us Branding & ARES Identity
+- [/] Phase 22: Universal Hardware HAL (Drivetrain, Motors, Sensors)
+- [ ] Phase 23: Profile-Driven Code Generation (XRP vs Lego vs REV)
+- [ ] Phase 24: REPL Stability & Filesystem Sync
+- Integrate the branding trigger in the Hardware Toolbar.
+
+### Phase 22: XRP Core Hardware API
+**Goal**: Achieve foundational movement parity with the XRP platform.
+- Implement `DifferentialDrive` and `Motor` abstractions.
+- Map blocks to `XRPLib` singleton patterns.
+
+### Phase 23: XRP Sensors & Servos
+**Goal**: Complete the XRP hardware surface.
+- Implement Rangefinder, Reflectance, and IMU sensor blocks.
+- Add support for all 4 servo ports with angle control.
+
+### Phase 24: REPL Protocol & Filesystem Stability
+**Goal**: Implement a robust MicroPython communication layer.
+- Implement the Raw REPL handshaking (Ctrl-A/C/D).
+- Develop the `walk()` filesystem utility for IDE mapping.
+
 ## Backlog / Deferred
 
 ### Phase 15: Multiplayer Collaboration

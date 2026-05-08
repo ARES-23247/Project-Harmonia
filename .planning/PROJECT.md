@@ -8,8 +8,8 @@ A universal, web-based robotics IDE designed for educational environments. It br
 **Shipped:** 2026-05-08
 **Summary:** Unified the IDE interface with dynamic view toggles, collapsible right-side drawer, portal-based floating modals, and a fixed bottom console. Established classroom management backend.
 
-## Current Milestone: v1.3 (TBD)
-**Goal:** Define the next major feature set (e.g., Hardware Connectivity or Advanced Simulation).
+## Current Milestone: v1.3 Community & XRP Integration
+**Goal:** Establish project identity and achieve full hardware feature parity for the XRP robotics platform.
 
 ## Requirements
 
@@ -32,6 +32,12 @@ A universal, web-based robotics IDE designed for educational environments. It br
 - [x] High-contrast, screen-reader compatible accessibility features with keyboard navigation. (Validated v1.1)
 - [ ] Built-in telemetry recording and CSV exports.
 - [ ] Interactive MicroPython REPL terminal.
+- **Milestone v1.3**: Community Branding & Universal Abstraction.
+    - Implement a "Write Once, Run Anywhere" block system for Drivetrain, Motors, and Sensors.
+    - Support dynamic switching between XRP, Lego Spike, and REV hardware profiles.
+    - Implement robust Raw REPL and Filesystem mapping protocols.
+    - Formalize project identity with ARES FTC 23247 branding.
+- [ ] Automatic `from XRPLib.defaults import *` injection for XRP projects.
 
 ### Out of Scope
 

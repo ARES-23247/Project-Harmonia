@@ -12,7 +12,7 @@ export default function BlocklyEditor() {
   const blocklyDiv = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   
-  const { yblockly } = useSharedCollaboration();
+  const { yblockly, ymonaco } = useSharedCollaboration();
   const setPythonCode = useEditorStore((state) => state.setPythonCode);
   const setBlocklyWorkspace = useEditorStore((state) => state.setBlocklyWorkspace);
   
@@ -20,6 +20,8 @@ export default function BlocklyEditor() {
   const setIsDragging = useBlockStore((state) => state.setIsDragging);
   const isLoading = useEditorStore((state) => state.isLoading);
   const setIsLoading = useEditorStore((state) => state.setIsLoading);
+  const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
+  const hardwareProfile = useEditorStore((state) => state.hardwareProfile);
 
   useEffect(() => {
     if (!blocklyDiv.current) return;
@@ -28,6 +30,7 @@ export default function BlocklyEditor() {
     const timeout = setTimeout(() => {
       // Initialize workspace using centralized manager
       const workspace = initializeWorkspace(blocklyDiv.current!);
+      workspaceRef.current = workspace;
       
       // Sync with stores
       setBlocklyWorkspace(workspace);
@@ -59,6 +62,14 @@ export default function BlocklyEditor() {
               yblockly.insert(0, xmlText);
             }
           }
+
+          // Sync to ymonaco (for text editor sync)
+          if (ymonaco) {
+            if (ymonaco.toString() !== (code || "")) {
+              ymonaco.delete(0, ymonaco.length);
+              ymonaco.insert(0, code || "");
+            }
+          }
         } catch (err) {
           console.error("Blockly code generation error:", err);
         }
@@ -81,6 +92,12 @@ export default function BlocklyEditor() {
             // Generate code for local Monaco view since workspace changed
             const code = pythonGenerator.workspaceToCode(workspace);
             setPythonCode(code || "# Drag blocks to generate code.");
+            if (ymonaco && code) {
+              if (ymonaco.toString() !== code) {
+                ymonaco.delete(0, ymonaco.length);
+                ymonaco.insert(0, code);
+              }
+            }
           }
         } catch (e) {
           console.error("Failed to parse remote Blockly XML", e);
@@ -96,6 +113,12 @@ export default function BlocklyEditor() {
       // Initial code generation
       const initialCode = pythonGenerator.workspaceToCode(workspace);
       setPythonCode(initialCode || "# Drag blocks to generate code.");
+      if (ymonaco && initialCode) {
+        if (ymonaco.toString() !== initialCode) {
+          ymonaco.delete(0, ymonaco.length);
+          ymonaco.insert(0, initialCode);
+        }
+      }
 
       // Responsive handling
       const resizeObserver = new ResizeObserver(() => {
@@ -110,12 +133,27 @@ export default function BlocklyEditor() {
         workspace.removeChangeListener(onWorkspaceChange);
         if (yblockly) yblockly.unobserve(yObserver);
         workspace.dispose();
+        workspaceRef.current = null;
         setStoreWorkspace(null);
       };
     }, 500); // 500ms for smooth transition
 
     return () => clearTimeout(timeout);
   }, [setBlocklyWorkspace, setPythonCode, setStoreWorkspace, setIsDragging, setIsLoading]);
+
+  // Trigger code re-generation when hardware profile changes
+  useEffect(() => {
+    if (workspaceRef.current) {
+      const code = pythonGenerator.workspaceToCode(workspaceRef.current);
+      setPythonCode(code || "# Drag blocks to generate code.");
+      if (ymonaco) {
+        if (ymonaco.toString() !== (code || "")) {
+          ymonaco.delete(0, ymonaco.length);
+          ymonaco.insert(0, code || "");
+        }
+      }
+    }
+  }, [hardwareProfile, setPythonCode, ymonaco]);
 
   return (
     <div ref={wrapperRef} className="workspace-container bg-background h-full">

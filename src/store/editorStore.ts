@@ -4,6 +4,7 @@ import { saveToGist } from "@/lib/cloud/github";
 
 export type ConnectionState = "disconnected" | "connecting" | "connected";
 export type ViewMode = "blocks" | "text" | "split";
+export type HardwareProfile = "xrp" | "lego" | "rev";
 
 interface EditorState {
   pythonCode: string;
@@ -23,6 +24,8 @@ interface EditorState {
   isRightDrawerOpen: boolean;
   poppedOutPanels: string[];
   isConsoleOpen: boolean;
+  isAboutUsOpen: boolean;
+  hardwareProfile: HardwareProfile;
   setPythonCode: (code: string) => void;
   setBlocklyWorkspace: (workspace: any) => void;
   setConnectionState: (state: ConnectionState) => void;
@@ -39,6 +42,8 @@ interface EditorState {
   setIsRightDrawerOpen: (open: boolean) => void;
   togglePopOut: (panelId: string) => void;
   setIsConsoleOpen: (open: boolean) => void;
+  setIsAboutUsOpen: (open: boolean) => void;
+  setHardwareProfile: (profile: HardwareProfile) => void;
   resetLayout: () => void;
 }
 
@@ -64,7 +69,8 @@ export const useEditorStore = create<EditorState>()(
       isRightDrawerOpen: false,
       poppedOutPanels: [],
       isConsoleOpen: false,
-
+      isAboutUsOpen: false,
+      hardwareProfile: "xrp",
 
       setPythonCode: (code) => {
         set({ pythonCode: code });
@@ -103,6 +109,8 @@ export const useEditorStore = create<EditorState>()(
           : [...state.poppedOutPanels, panelId]
       })),
       setIsConsoleOpen: (open) => set({ isConsoleOpen: open }),
+      setIsAboutUsOpen: (open) => set({ isAboutUsOpen: open }),
+      setHardwareProfile: (profile) => set({ hardwareProfile: profile }),
       resetLayout: () => set({ 
         poppedOutPanels: [], 
         isRightDrawerOpen: true,
@@ -120,6 +128,7 @@ export const useEditorStore = create<EditorState>()(
         githubToken: state.githubToken,
         gistId: state.gistId,
         aiApiKey: state.aiApiKey,
+        hardwareProfile: state.hardwareProfile,
       }),
     }
   )

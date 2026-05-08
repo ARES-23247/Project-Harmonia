@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Bluetooth, Usb, PlaySquare, Play, LayoutGrid, Type, Columns, PanelRightOpen, Terminal, RotateCcw } from "lucide-react";
+import { Bluetooth, Usb, PlaySquare, Play, LayoutGrid, Type, Columns, PanelRightOpen, Terminal, RotateCcw, Shield, Bot, Cpu, Box } from "lucide-react";
 import { useEditorStore } from "@/store/editorStore";
 import { BluetoothProvider } from "@/lib/hardware/bluetooth";
 import { SerialProvider } from "@/lib/hardware/serial";
@@ -18,6 +18,9 @@ export function HardwareToolbar() {
   const isConsoleOpen = useEditorStore((state) => state.isConsoleOpen);
   const setIsConsoleOpen = useEditorStore((state) => state.setIsConsoleOpen);
   const resetLayout = useEditorStore((state) => state.resetLayout);
+  const setIsAboutUsOpen = useEditorStore((state) => state.setIsAboutUsOpen);
+  const hardwareProfile = useEditorStore((state) => state.hardwareProfile);
+  const setHardwareProfile = useEditorStore((state) => state.setHardwareProfile);
 
   const handleConnect = async (type: "bluetooth" | "serial" | "simulation") => {
     setConnectionState("connecting");
@@ -50,6 +53,33 @@ export function HardwareToolbar() {
 
   return (
     <div id="hardware-toolbar" className="h-14 border-b glass flex items-center px-4 gap-4 shrink-0">
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        onClick={() => setIsAboutUsOpen(true)}
+        className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-all group"
+        title="About Project Harmonia"
+      >
+        <Shield className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+      </Button>
+
+      <div className="h-8 w-px bg-border mx-1" />
+
+      <div className="flex items-center gap-2 px-2 py-1 rounded-xl bg-muted/50 border border-border/50">
+        <Bot className="w-4 h-4 text-muted-foreground ml-1" />
+        <select 
+          value={hardwareProfile}
+          onChange={(e) => setHardwareProfile(e.target.value as any)}
+          className="bg-transparent text-sm font-medium focus:outline-none cursor-pointer pr-2"
+        >
+          <option value="xrp">XRP Robot</option>
+          <option value="lego">Lego Spike</option>
+          <option value="rev">REV Hub</option>
+        </select>
+      </div>
+
+      <div className="h-8 w-px bg-border mx-1" />
+
       <div className="flex items-center gap-3">
         <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Connect Robot</span>
         <div className="flex gap-2">

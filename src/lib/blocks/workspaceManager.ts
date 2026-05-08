@@ -3,6 +3,11 @@ import { registerRobotBlocks } from "./robotBlocks";
 import { registerLegoBlocks } from "./legoBlocks";
 import { registerRobotGenerators } from "./robotGenerators";
 import { registerLegoGenerators } from "./legoGenerators";
+import { registerXrpBlocks } from "./xrpBlocks";
+import { registerXrpGenerators } from "./xrpGenerators";
+import { registerUniversalBlocks } from "./universalBlocks";
+import { registerUniversalGenerators } from "./universalGenerators";
+import { pythonGenerator } from "blockly/python";
 import { KeyboardNavigation } from "@blockly/keyboard-navigation";
 
 import Theme from "@blockly/theme-dark";
@@ -68,23 +73,54 @@ export const WORKSPACE_CONFIG: any = {
       },
       {
         kind: "category",
-        name: "Robot",
+        name: "Drivetrain",
         colour: "230",
         contents: [
-          { kind: "block", type: "harmonia_drive" },
-          { kind: "block", type: "harmonia_sleep" },
-          { kind: "block", type: "gamepad_get_button" },
-          { kind: "block", type: "gamepad_get_axis" },
+          { kind: "block", type: "robot_drive_straight", inputs: { DIST: { kind: "shadow", type: "math_number", fields: { NUM: 10 } }, SPEED: { kind: "shadow", type: "math_number", fields: { NUM: 0.5 } } } },
+          { kind: "block", type: "robot_drive_turn", inputs: { ANGLE: { kind: "shadow", type: "math_number", fields: { NUM: 90 } }, SPEED: { kind: "shadow", type: "math_number", fields: { NUM: 0.5 } } } },
+          { kind: "block", type: "robot_drive_arcade" },
+          { kind: "block", type: "robot_stop" },
         ],
       },
       {
         kind: "category",
-        name: "Lego",
-        colour: "230",
+        name: "Motors",
+        colour: "190",
+        contents: [
+          { kind: "block", type: "robot_motor_set_speed", inputs: { SPEED: { kind: "shadow", type: "math_number", fields: { NUM: 50 } } } },
+          { kind: "block", type: "robot_motor_get_position" },
+          { kind: "block", type: "robot_motor_reset" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Sensors",
+        colour: "65",
+        contents: [
+          { kind: "block", type: "robot_get_distance" },
+          { kind: "block", type: "robot_get_reflectance" },
+          { kind: "block", type: "robot_get_yaw" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "XRP Features",
+        colour: "120",
+        contents: [
+          { kind: "block", type: "xrp_servo_deg", inputs: { degrees: { kind: "shadow", type: "math_number", fields: { NUM: 90 } } } },
+          { kind: "sep" },
+          { kind: "block", type: "xrp_led_on" },
+          { kind: "block", type: "xrp_led_off" },
+          { kind: "block", type: "xrp_button_pressed" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Lego Features",
+        colour: "20",
         contents: [
           { kind: "block", type: "lego_motor_run_target" },
           { kind: "block", type: "lego_motor_run_stalled" },
-          { kind: "block", type: "lego_color_sensor" },
         ],
       },
       { kind: "sep" },
@@ -122,9 +158,13 @@ export const WORKSPACE_CONFIG: any = {
 export function initializeWorkspace(container: HTMLElement): Blockly.WorkspaceSvg {
   // Register custom blocks and generators
   registerRobotBlocks();
-  registerRobotGenerators();
+  registerRobotGenerators(pythonGenerator);
   registerLegoBlocks();
-  registerLegoGenerators();
+  registerLegoGenerators(pythonGenerator);
+  registerXrpBlocks();
+  registerXrpGenerators(pythonGenerator);
+  registerUniversalBlocks();
+  registerUniversalGenerators(pythonGenerator);
 
   const workspace = Blockly.inject(container, WORKSPACE_CONFIG);
   

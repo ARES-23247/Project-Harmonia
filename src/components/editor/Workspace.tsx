@@ -11,6 +11,7 @@ import { useOnboardingStore } from "@/store/onboardingStore";
 import { SideDrawer } from "./SideDrawer";
 import { FloatingPanel } from "./FloatingPanel";
 import { BottomConsole } from "./BottomConsole";
+import { AboutUsModal } from "../modals/AboutUsModal";
 
 const MonacoEditor = lazy(() => import("./MonacoEditor"));
 const BlocklyEditor = lazy(() => import("./BlocklyEditor"));
@@ -36,6 +37,8 @@ export function Workspace() {
   
   const viewMode = useEditorStore((state) => state.viewMode);
   const poppedOutPanels = useEditorStore((state) => state.poppedOutPanels);
+  const isAboutUsOpen = useEditorStore((state) => state.isAboutUsOpen);
+  const setIsAboutUsOpen = useEditorStore((state) => state.setIsAboutUsOpen);
 
   const isSimPopped = poppedOutPanels.includes("simulation");
   const isTelePopped = poppedOutPanels.includes("telemetry");
@@ -173,6 +176,8 @@ export function Workspace() {
             </FloatingPanel>
           )}
         </AnimatePresence>
+
+        <AboutUsModal isOpen={isAboutUsOpen} onOpenChange={setIsAboutUsOpen} />
       </motion.div>
     </CollaborationProvider>
   );

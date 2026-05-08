@@ -1,9 +1,9 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.3
-milestone_name: TBD
+milestone_name: Community & XRP Integration
 status: planning
-last_updated: "2026-05-08T14:45:00Z"
+last_updated: "2026-05-08T15:40:00Z"
 last_activity: 2026-05-08
 progress:
   total_phases: 0
@@ -20,7 +20,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-08)
 
 **Core value:** To provide a frictionless, 100% free, "write once, run anywhere" educational coding platform that eliminates the barriers between different robotic hardware ecosystems.
-**Current focus:** Planning Milestone v1.3.
+**Current focus:** Planning Phase 21: Community "About Us" Modal.
 
 ## Previous Milestone: v1.2
 

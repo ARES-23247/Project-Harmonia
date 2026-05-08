@@ -1,7 +1,7 @@
-import { pythonGenerator, Order } from "blockly/python";
+import { PythonGenerator, Order } from "blockly/python";
 import { GamepadButtons, GamepadAxes } from "../hardware/gamepad";
 
-export function registerRobotGenerators() {
+export function registerRobotGenerators(pythonGenerator: PythonGenerator) {
   pythonGenerator.forBlock["harmonia_drive"] = function (block, generator) {
     const left = generator.valueToCode(block, "LEFT", Order.NONE) || "0";
     const right = generator.valueToCode(block, "RIGHT", Order.NONE) || "0";
